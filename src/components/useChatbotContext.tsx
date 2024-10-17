@@ -1,4 +1,3 @@
-// In useChatbotContext.ts
 import { useContext } from 'react';
 import { ChatbotContext, ChatbotContextProps } from './Chatbot';
 

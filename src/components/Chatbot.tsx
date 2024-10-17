@@ -78,7 +78,6 @@ const Chatbot: React.FC<ChatbotProps> = ({
     conversationHistory: MessageType[]
   ) => {
     try {
-      // Construct the messages array
       const messages = [
         {
           role: 'system',
@@ -100,7 +99,6 @@ const Chatbot: React.FC<ChatbotProps> = ({
         },
       ];
   
-      // Send the messages array to the chatbot API
       const response = await fetch(chatApiRoute, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -163,58 +161,45 @@ const Chatbot: React.FC<ChatbotProps> = ({
   const handleSendMessage = async (message: string) => {
     const userMessage: MessageType = { message, sender: username || 'You' };
   
-    // Add the user's message to the messages array immediately
     const updatedMessages = [...messages, userMessage];
     setMessages([...updatedMessages, { message: '', sender: 'Loading', loading: true }]);
     setIsLoading(true);
   
-    // Prepare the conversation history as an array of messages
     const conversationHistory = updatedMessages.slice(-conversationHistoryLength);
   
-    // Convert conversation history to a string to be passed to SparkEngine
     const conversationHistoryString = conversationHistory
       .map((msg) => `${msg.sender === username ? 'User' : 'Chatbot'}: ${msg.message}`)
       .join('\n');
   
-    // Fetch the AI response from chat API with the latest conversation history
     const chatResponse = await fetchChatResponse(
       message,
       callSparkEngineWhen,
       conversationHistory
     );
   
-    // Check if the chat API's response contains <$>CALL SYSTEM</$>
     if (chatResponse.includes('<$>CALL SYSTEM</$>')) {
-      // Fetch a summary of the conversation for Spark Engine using the string format of the conversation history
       const summary = await fetchSummaryForSparkEngine(conversationHistoryString);
   
-      // Send the summary to Spark Engine
       const sparkEngineResponse = await sendToSparkEngine(summary);
   
-      // Handle the Spark Engine response
       const selectedResponses = sparkEngineResponse.data.map((item: any) => ({
         message: item?.output || 'Invalid data',
         sender: item?.name || 'Sparkchat',
       }));
   
-      // Replace the "Loading" message with the Spark Engine response
       setMessages((prev) => [...prev.slice(0, prev.length - 1), ...selectedResponses]);
     } else {
-      // If AI is not calling the system, just continue the conversation
       const chatMessage: MessageType = {
         message: chatResponse,
         sender: 'Chatbot',
         loading: false,
       };
   
-      // Replace the "Loading" message with the AI's response
       setMessages((prev) => [...prev.slice(0, prev.length - 1), chatMessage]);
     }
   
     setIsLoading(false);
   };
-  
-  
   
   const positionStyles = {
     left: { marginLeft: offsetX, marginRight: 'auto' },
@@ -229,7 +214,6 @@ const Chatbot: React.FC<ChatbotProps> = ({
   : typeof height === 'number'
   ? height * 0.7
   : '70%';
-
 
     return (
       <Box
@@ -272,9 +256,7 @@ const Chatbot: React.FC<ChatbotProps> = ({
                   />
                 )}
               </ChatbotWindow>
-              <Box p="sm" mt="md">
                 <ChatInput />
-              </Box>
             </>
           )}
         </ChatbotContext.Provider>

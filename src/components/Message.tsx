@@ -27,9 +27,9 @@ interface MessageProps {
   mr?: string;
   mx?: string;
   my?: string;
-  borderRadius?: string;       // General border radius
-  userBorderRadius?: string;   // Specific border radius for user messages
-  botBorderRadius?: string;    // Specific border radius for bot messages
+  borderRadius?: string;
+  userBorderRadius?: string; 
+  botBorderRadius?: string;
   botBorder?: string;
   userBorder?: string;
   sender?: string;
@@ -44,9 +44,9 @@ const Message: React.FC<MessageProps> = ({
   botFontSize = '1rem',
   p, pt, pb, pl, pr, px, py,
   m, mt, mb, ml, mr, mx, my,
-  borderRadius = '8px',            // Default border radius
-  userBorderRadius,                // Overrides borderRadius for user
-  botBorderRadius,                 // Overrides borderRadius for bot
+  borderRadius = '8px',       
+  userBorderRadius, 
+  botBorderRadius, 
   botBorder = '1px solid',
   userBorder = '1px solid',
   sender,

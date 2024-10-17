@@ -10,7 +10,7 @@ interface ChatInputProps {
   inputTextColor?: string;
   inputBorderColor?: string;
   inputFontSize?: string;
-  p?: string; // Padding shorthand
+  p?: string;
   pt?: string;
   pb?: string;
   pl?: string;

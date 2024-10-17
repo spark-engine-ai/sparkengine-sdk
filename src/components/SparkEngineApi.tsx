@@ -1,4 +1,3 @@
-// components/SparkEngineApi.ts
 import axios from 'axios';
 
 interface CompletionRequest {
