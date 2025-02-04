@@ -13,7 +13,7 @@ export default async function handler(req: any, res: any) {
 
       const completion = await groq.chat.completions.create({
         messages,
-        model: 'llama3-8b-8192',
+        model: 'llama-3.3-70b-versatile',
       });
 
       const responseContent = completion.choices[0]?.message?.content || '';

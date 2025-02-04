@@ -110,6 +110,7 @@ const Chatbot: React.FC<ChatbotProps> = ({
       }
   
       const data = await response.json();
+      console.log(data)
       return data.message || 'Sorry, something went wrong.';
     } catch (error) {
       console.error('Error fetching from chat API:', error);
@@ -120,18 +121,25 @@ const Chatbot: React.FC<ChatbotProps> = ({
 
   const fetchSummaryForSparkEngine = async (conversationHistory: string) => {
     try {
+      const messages = [
+        {
+          role: 'system',
+          content: `Summarize the conversation and respond with saying the exact words of what the user wants or the data you have collected so we can use it in a call to a multi-agent system: ${conversationHistory}`,
+        }
+      ]
       const response = await fetch(chatApiRoute, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: `Summarize the following conversation:\n${conversationHistory}\n Task met: ${callSparkEngineWhen}` }),
+        body: JSON.stringify({ messages }),
       });
-  
+      
       if (!response.ok) {
         throw new Error('Failed to fetch the summary');
       }
   
       const summaryData = await response.json();
-      return summaryData.output;
+      console.log('summary',summaryData)
+      return summaryData.message;
     } catch (error) {
       console.error('Error fetching summary:', error);
       return 'Sorry, something went wrong while summarizing.';
@@ -178,6 +186,7 @@ const Chatbot: React.FC<ChatbotProps> = ({
     );
   
     if (chatResponse.includes('<$>CALL SYSTEM</$>')) {
+      console.log(conversationHistoryString)
       const summary = await fetchSummaryForSparkEngine(conversationHistoryString);
   
       const sparkEngineResponse = await sendToSparkEngine(summary);
